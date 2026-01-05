@@ -1,0 +1,517 @@
+### =============================================
+### Kafka Connect REST API
+### Base URL: http://localhost:8083
+### =============================================
+
+@baseUrl = http://localhost:8083
+
+### =============================================
+### HEALTH & INFO
+### =============================================
+
+### Get Kafka Connect cluster info
+GET {{baseUrl}}/
+
+###
+
+### Get list of connector plugins
+GET {{baseUrl}}/connector-plugins
+
+###
+
+### =============================================
+### LIST CONNECTORS
+### =============================================
+
+### List all connectors
+GET {{baseUrl}}/connectors
+
+###
+
+### List all connectors with status
+GET {{baseUrl}}/connectors?expand=status
+
+###
+
+### List all connectors with info
+GET {{baseUrl}}/connectors?expand=info
+
+###
+
+### =============================================
+### TEAMS CONNECTOR
+### =============================================
+
+### Create teams source connector
+POST {{baseUrl}}/connectors
+Content-Type: application/json
+
+{
+  "name": "sqlserver-teams-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+    "tasks.max": "1",
+    "database.hostname": "host.docker.internal",
+    "database.port": "1433",
+    "database.user": "debezium_user",
+    "database.password": "Debezium@2025!",
+    "database.names": "sport",
+    "database.encrypt": "false",
+    "topic.prefix": "cdc",
+    "table.include.list": "dbo.teams",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+    "schema.history.internal.kafka.topic": "schema-changes.sport",
+    "database.history.kafka.bootstrap.servers": "kafka:29092",
+    "database.history.kafka.topic": "dbhistory.sport.teams",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "include.schema.changes": "true",
+    "snapshot.mode": "initial"
+  }
+}
+
+###
+
+### Get teams connector status
+GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/status
+
+###
+
+### Get teams connector config
+GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/config
+
+###
+
+### Pause teams connector
+PUT {{baseUrl}}/connectors/sqlserver-teams-source-connector/pause
+
+###
+
+### Resume teams connector
+PUT {{baseUrl}}/connectors/sqlserver-teams-source-connector/resume
+
+###
+
+### Restart teams connector
+POST {{baseUrl}}/connectors/sqlserver-teams-source-connector/restart
+
+###
+
+### Delete teams connector
+DELETE {{baseUrl}}/connectors/sqlserver-teams-source-connector
+
+###
+
+### =============================================
+### PLAYERS CONNECTOR
+### =============================================
+
+### Create players source connector
+POST {{baseUrl}}/connectors
+Content-Type: application/json
+
+{
+  "name": "sqlserver-players-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+    "tasks.max": "1",
+    "database.hostname": "host.docker.internal",
+    "database.port": "1433",
+    "database.user": "debezium_user",
+    "database.password": "Debezium@2025!",
+    "database.names": "sport",
+    "database.encrypt": "false",
+    "topic.prefix": "cdc",
+    "table.include.list": "dbo.players",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+    "schema.history.internal.kafka.topic": "schema-changes.sport",
+    "database.history.kafka.bootstrap.servers": "kafka:29092",
+    "database.history.kafka.topic": "dbhistory.sport.players",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "include.schema.changes": "true",
+    "snapshot.mode": "initial"
+  }
+}
+
+###
+
+### Get players connector status
+GET {{baseUrl}}/connectors/sqlserver-players-source-connector/status
+
+###
+
+### Get players connector config
+GET {{baseUrl}}/connectors/sqlserver-players-source-connector/config
+
+###
+
+### Pause players connector
+PUT {{baseUrl}}/connectors/sqlserver-players-source-connector/pause
+
+###
+
+### Resume players connector
+PUT {{baseUrl}}/connectors/sqlserver-players-source-connector/resume
+
+###
+
+### Restart players connector
+POST {{baseUrl}}/connectors/sqlserver-players-source-connector/restart
+
+###
+
+### Delete players connector
+DELETE {{baseUrl}}/connectors/sqlserver-players-source-connector
+
+###
+
+### =============================================
+### SQUAD CONNECTOR
+### =============================================
+
+### Create squad source connector
+POST {{baseUrl}}/connectors
+Content-Type: application/json
+
+{
+  "name": "sqlserver-squad-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+    "tasks.max": "1",
+    "database.hostname": "host.docker.internal",
+    "database.port": "1433",
+    "database.user": "debezium_user",
+    "database.password": "Debezium@2025!",
+    "database.names": "sport",
+    "database.encrypt": "false",
+    "topic.prefix": "cdc",
+    "table.include.list": "dbo.squad",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+    "schema.history.internal.kafka.topic": "schema-changes.sport",
+    "database.history.kafka.bootstrap.servers": "kafka:29092",
+    "database.history.kafka.topic": "dbhistory.sport.squad",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "include.schema.changes": "true",
+    "snapshot.mode": "initial"
+  }
+}
+
+###
+
+### Get squad connector status
+GET {{baseUrl}}/connectors/sqlserver-squad-source-connector/status
+
+###
+
+### Get squad connector config
+GET {{baseUrl}}/connectors/sqlserver-squad-source-connector/config
+
+###
+
+### Pause squad connector
+PUT {{baseUrl}}/connectors/sqlserver-squad-source-connector/pause
+
+###
+
+### Resume squad connector
+PUT {{baseUrl}}/connectors/sqlserver-squad-source-connector/resume
+
+###
+
+### Restart squad connector
+POST {{baseUrl}}/connectors/sqlserver-squad-source-connector/restart
+
+###
+
+### Delete squad connector
+DELETE {{baseUrl}}/connectors/sqlserver-squad-source-connector
+
+###
+
+### =============================================
+### TASKS MANAGEMENT
+### =============================================
+
+### Get teams connector tasks
+GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/tasks
+
+###
+
+### Restart specific task (task 0)
+POST {{baseUrl}}/connectors/sqlserver-teams-source-connector/tasks/0/restart
+
+###
+
+### Get task status
+GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/tasks/0/status
+
+###
+
+### =============================================
+### BULK OPERATIONS
+### =============================================
+
+### Delete all source connectors
+DELETE {{baseUrl}}/connectors/sqlserver-teams-source-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/sqlserver-players-source-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/sqlserver-squad-source-connector
+
+###
+
+### Delete all sink connectors
+DELETE {{baseUrl}}/connectors/postgres-teams-sink-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/postgres-players-sink-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/postgres-squad-sink-connector
+
+###
+
+### =============================================
+### POSTGRESQL SINK CONNECTORS
+### =============================================
+
+### =============================================
+### TEAMS SINK CONNECTOR
+### =============================================
+
+### Create teams sink connector
+POST {{baseUrl}}/connectors
+Content-Type: application/json
+
+{
+  "name": "postgres-teams-sink-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "connection.url": "jdbc:postgresql://postgres:5432/sport",
+    "connection.username": "postgres",
+    "connection.password": "postgres",
+    "topics": "cdc.sport.dbo.teams",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "primary.key.mode": "record_key",
+    "primary.key.fields": "team_id",
+    "schema.evolution": "basic",
+    "table.name.format": "teams",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite"
+  }
+}
+
+###
+
+### Get teams sink connector status
+GET {{baseUrl}}/connectors/postgres-teams-sink-connector/status
+
+###
+
+### Get teams sink connector config
+GET {{baseUrl}}/connectors/postgres-teams-sink-connector/config
+
+###
+
+### Pause teams sink connector
+PUT {{baseUrl}}/connectors/postgres-teams-sink-connector/pause
+
+###
+
+### Resume teams sink connector
+PUT {{baseUrl}}/connectors/postgres-teams-sink-connector/resume
+
+###
+
+### Restart teams sink connector
+POST {{baseUrl}}/connectors/postgres-teams-sink-connector/restart
+
+###
+
+### Delete teams sink connector
+DELETE {{baseUrl}}/connectors/postgres-teams-sink-connector
+
+###
+
+### =============================================
+### PLAYERS SINK CONNECTOR
+### =============================================
+
+### Create players sink connector
+POST {{baseUrl}}/connectors
+Content-Type: application/json
+
+{
+  "name": "postgres-players-sink-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "connection.url": "jdbc:postgresql://postgres:5432/sport",
+    "connection.username": "postgres",
+    "connection.password": "postgres",
+    "topics": "cdc.sport.dbo.players",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "primary.key.mode": "record_key",
+    "primary.key.fields": "player_id",
+    "schema.evolution": "basic",
+    "table.name.format": "players",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite"
+  }
+}
+
+###
+
+### Get players sink connector status
+GET {{baseUrl}}/connectors/postgres-players-sink-connector/status
+
+###
+
+### Get players sink connector config
+GET {{baseUrl}}/connectors/postgres-players-sink-connector/config
+
+###
+
+### Pause players sink connector
+PUT {{baseUrl}}/connectors/postgres-players-sink-connector/pause
+
+###
+
+### Resume players sink connector
+PUT {{baseUrl}}/connectors/postgres-players-sink-connector/resume
+
+###
+
+### Restart players sink connector
+POST {{baseUrl}}/connectors/postgres-players-sink-connector/restart
+
+###
+
+### Delete players sink connector
+DELETE {{baseUrl}}/connectors/postgres-players-sink-connector
+
+###
+
+### =============================================
+### SQUAD SINK CONNECTOR
+### =============================================
+
+### Create squad sink connector
+POST {{baseUrl}}/connectors
+Content-Type: application/json
+
+{
+  "name": "postgres-squad-sink-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.jdbc.JdbcSinkConnector",
+    "tasks.max": "1",
+    "connection.url": "jdbc:postgresql://postgres:5432/sport",
+    "connection.username": "postgres",
+    "connection.password": "postgres",
+    "topics": "cdc.sport.dbo.squad",
+    "insert.mode": "upsert",
+    "delete.enabled": "true",
+    "primary.key.mode": "record_key",
+    "primary.key.fields": "squad_id",
+    "schema.evolution": "basic",
+    "table.name.format": "squad",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "false",
+    "transforms.unwrap.delete.handling.mode": "rewrite"
+  }
+}
+
+###
+
+### Get squad sink connector status
+GET {{baseUrl}}/connectors/postgres-squad-sink-connector/status
+
+###
+
+### Get squad sink connector config
+GET {{baseUrl}}/connectors/postgres-squad-sink-connector/config
+
+###
+
+### Pause squad sink connector
+PUT {{baseUrl}}/connectors/postgres-squad-sink-connector/pause
+
+###
+
+### Resume squad sink connector
+PUT {{baseUrl}}/connectors/postgres-squad-sink-connector/resume
+
+###
+
+### Restart squad sink connector
+POST {{baseUrl}}/connectors/postgres-squad-sink-connector/restart
+
+###
+
+### Delete squad sink connector
+DELETE {{baseUrl}}/connectors/postgres-squad-sink-connector
+
+###
+
+### =============================================
+### DELETE ALL CONNECTORS
+### =============================================
+
+### Delete all source connectors (run these first)
+DELETE {{baseUrl}}/connectors/sqlserver-players-source-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/sqlserver-squad-source-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/sqlserver-teams-source-connector
+
+###
+
+### Delete all sink connectors
+DELETE {{baseUrl}}/connectors/postgres-players-sink-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/postgres-squad-sink-connector
+
+###
+
+DELETE {{baseUrl}}/connectors/postgres-teams-sink-connector
+

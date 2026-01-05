@@ -1,0 +1,25 @@
+{
+  "name": "sqlserver-squad-source-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.sqlserver.SqlServerConnector",
+    "tasks.max": "1",
+    "database.hostname": "host.docker.internal",
+    "database.port": "1433",
+    "database.user": "debezium_user",
+    "database.password": "Debezium@2025!",
+    "database.names": "sport",
+    "database.encrypt": "false",
+    "topic.prefix": "cdc",
+    "table.include.list": "dbo.squad",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
+    "schema.history.internal.kafka.topic": "schema-changes.sport",
+    "database.history.kafka.bootstrap.servers": "kafka:29092",
+    "database.history.kafka.topic": "dbhistory.sport.squad",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "include.schema.changes": "true",
+    "snapshot.mode": "initial"
+  }
+}
