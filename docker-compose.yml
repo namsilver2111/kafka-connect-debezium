@@ -44,6 +44,7 @@ services:
       - kafka
     ports:
       - "8083:8083"
+      - "9404:9404"
     environment:
       GROUP_ID: 1
       CONFIG_STORAGE_TOPIC: connect_configs
@@ -56,6 +57,9 @@ services:
       VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      KAFKA_OPTS: "-javaagent:/monitoring/jmx_prometheus_javaagent.jar=9404:/monitoring/jmx-exporter-config.yml"
+    volumes:
+      - ./monitoring:/monitoring
     networks:
       - debezium-network
 
@@ -149,6 +153,21 @@ services:
     networks:
       - debezium-network
 
+  # Prometheus for monitoring
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - debezium-network
+
 networks:
   debezium-network:
     driver: bridge
@@ -157,4 +176,5 @@ volumes:
   postgres-data:
   pgadmin-data:
   elasticsearch-data:
+  prometheus-data:
 
