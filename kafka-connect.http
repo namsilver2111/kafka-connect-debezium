@@ -72,37 +72,8 @@ Content-Type: application/json
   }
 }
 
-###
-
 ### Get teams connector status
 GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/status
-
-###
-
-### Get teams connector config
-GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/config
-
-###
-
-### Pause teams connector
-PUT {{baseUrl}}/connectors/sqlserver-teams-source-connector/pause
-
-###
-
-### Resume teams connector
-PUT {{baseUrl}}/connectors/sqlserver-teams-source-connector/resume
-
-###
-
-### Restart teams connector
-POST {{baseUrl}}/connectors/sqlserver-teams-source-connector/restart
-
-###
-
-### Delete teams connector
-DELETE {{baseUrl}}/connectors/sqlserver-teams-source-connector
-
-###
 
 ### =============================================
 ### PLAYERS CONNECTOR
@@ -138,37 +109,8 @@ Content-Type: application/json
   }
 }
 
-###
-
 ### Get players connector status
 GET {{baseUrl}}/connectors/sqlserver-players-source-connector/status
-
-###
-
-### Get players connector config
-GET {{baseUrl}}/connectors/sqlserver-players-source-connector/config
-
-###
-
-### Pause players connector
-PUT {{baseUrl}}/connectors/sqlserver-players-source-connector/pause
-
-###
-
-### Resume players connector
-PUT {{baseUrl}}/connectors/sqlserver-players-source-connector/resume
-
-###
-
-### Restart players connector
-POST {{baseUrl}}/connectors/sqlserver-players-source-connector/restart
-
-###
-
-### Delete players connector
-DELETE {{baseUrl}}/connectors/sqlserver-players-source-connector
-
-###
 
 ### =============================================
 ### SQUAD CONNECTOR
@@ -204,86 +146,8 @@ Content-Type: application/json
   }
 }
 
-###
-
 ### Get squad connector status
 GET {{baseUrl}}/connectors/sqlserver-squad-source-connector/status
-
-###
-
-### Get squad connector config
-GET {{baseUrl}}/connectors/sqlserver-squad-source-connector/config
-
-###
-
-### Pause squad connector
-PUT {{baseUrl}}/connectors/sqlserver-squad-source-connector/pause
-
-###
-
-### Resume squad connector
-PUT {{baseUrl}}/connectors/sqlserver-squad-source-connector/resume
-
-###
-
-### Restart squad connector
-POST {{baseUrl}}/connectors/sqlserver-squad-source-connector/restart
-
-###
-
-### Delete squad connector
-DELETE {{baseUrl}}/connectors/sqlserver-squad-source-connector
-
-###
-
-### =============================================
-### TASKS MANAGEMENT
-### =============================================
-
-### Get teams connector tasks
-GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/tasks
-
-###
-
-### Restart specific task (task 0)
-POST {{baseUrl}}/connectors/sqlserver-teams-source-connector/tasks/0/restart
-
-###
-
-### Get task status
-GET {{baseUrl}}/connectors/sqlserver-teams-source-connector/tasks/0/status
-
-###
-
-### =============================================
-### BULK OPERATIONS
-### =============================================
-
-### Delete all source connectors
-DELETE {{baseUrl}}/connectors/sqlserver-teams-source-connector
-
-###
-
-DELETE {{baseUrl}}/connectors/sqlserver-players-source-connector
-
-###
-
-DELETE {{baseUrl}}/connectors/sqlserver-squad-source-connector
-
-###
-
-### Delete all sink connectors
-DELETE {{baseUrl}}/connectors/postgres-teams-sink-connector
-
-###
-
-DELETE {{baseUrl}}/connectors/postgres-players-sink-connector
-
-###
-
-DELETE {{baseUrl}}/connectors/postgres-squad-sink-connector
-
-###
 
 ### =============================================
 ### POSTGRESQL SINK CONNECTORS
@@ -319,39 +183,11 @@ Content-Type: application/json
     "transforms": "unwrap",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
-    "transforms.unwrap.delete.handling.mode": "rewrite"
+    "transforms.unwrap.delete.handling.mode": "none"
   }
 }
-
-###
-
 ### Get teams sink connector status
 GET {{baseUrl}}/connectors/postgres-teams-sink-connector/status
-
-###
-
-### Get teams sink connector config
-GET {{baseUrl}}/connectors/postgres-teams-sink-connector/config
-
-###
-
-### Pause teams sink connector
-PUT {{baseUrl}}/connectors/postgres-teams-sink-connector/pause
-
-###
-
-### Resume teams sink connector
-PUT {{baseUrl}}/connectors/postgres-teams-sink-connector/resume
-
-###
-
-### Restart teams sink connector
-POST {{baseUrl}}/connectors/postgres-teams-sink-connector/restart
-
-###
-
-### Delete teams sink connector
-DELETE {{baseUrl}}/connectors/postgres-teams-sink-connector
 
 ###
 
@@ -385,39 +221,13 @@ Content-Type: application/json
     "transforms": "unwrap",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
-    "transforms.unwrap.delete.handling.mode": "rewrite"
+    "transforms.unwrap.delete.handling.mode": "none"
   }
 }
-
-###
 
 ### Get players sink connector status
 GET {{baseUrl}}/connectors/postgres-players-sink-connector/status
 
-###
-
-### Get players sink connector config
-GET {{baseUrl}}/connectors/postgres-players-sink-connector/config
-
-###
-
-### Pause players sink connector
-PUT {{baseUrl}}/connectors/postgres-players-sink-connector/pause
-
-###
-
-### Resume players sink connector
-PUT {{baseUrl}}/connectors/postgres-players-sink-connector/resume
-
-###
-
-### Restart players sink connector
-POST {{baseUrl}}/connectors/postgres-players-sink-connector/restart
-
-###
-
-### Delete players sink connector
-DELETE {{baseUrl}}/connectors/postgres-players-sink-connector
 
 ###
 
@@ -451,41 +261,9 @@ Content-Type: application/json
     "transforms": "unwrap",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
-    "transforms.unwrap.delete.handling.mode": "rewrite"
+    "transforms.unwrap.delete.handling.mode": "none"
   }
 }
-
-###
-
-### Get squad sink connector status
-GET {{baseUrl}}/connectors/postgres-squad-sink-connector/status
-
-###
-
-### Get squad sink connector config
-GET {{baseUrl}}/connectors/postgres-squad-sink-connector/config
-
-###
-
-### Pause squad sink connector
-PUT {{baseUrl}}/connectors/postgres-squad-sink-connector/pause
-
-###
-
-### Resume squad sink connector
-PUT {{baseUrl}}/connectors/postgres-squad-sink-connector/resume
-
-###
-
-### Restart squad sink connector
-POST {{baseUrl}}/connectors/postgres-squad-sink-connector/restart
-
-###
-
-### Delete squad sink connector
-DELETE {{baseUrl}}/connectors/postgres-squad-sink-connector
-
-###
 
 ### =============================================
 ### DELETE ALL CONNECTORS
