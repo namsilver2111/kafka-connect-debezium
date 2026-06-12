@@ -74,160 +74,94 @@ Debezium/
 
 ---
 
-## Step 1: Start Kafka Infrastructure
+## Project Setup (Quick Start)
+
+Follow these 3 steps in order to set up and run the project:
+
+### Step 1: Run SQL Server Database Setup Script
+Initialize the source database schema, populate initial data, enable CDC, and configure Debezium credentials by running the [script/init_sqlserver.sql](file:///c:/Users/NamDang/Documents/kafka-connect-debezium/script/init_sqlserver.sql) script.
+
+#### Using an existing SQL Server instance
+Connect to your database engine via SSMS, Azure Data Studio, or any CLI tool and execute the script [script/init_sqlserver.sql].
+
+> [!NOTE]
+> The database initialization script configures the following:
+> - Creates `sport` database and `teams`, `players`, `squad` tables.
+> - Creates login user `debezium_user` (Password: `Debezium@2025!`) and grants required permissions.
+> - Enables CDC on the database and all three tables.
+
+---
+
+### Step 2: Start Infrastructure Services
+Start the rest of the application ecosystem configured in [docker-compose.yml](file:///c:/Users/NamDang/Documents/kafka-connect-debezium/docker-compose.yml):
 
 ```bash
-# Navigate to project directory
-cd Debezium
-
-# Start all services
+# Start all containers in the background
 docker-compose up -d
 
-# Verify services are running
+# Verify that all services are healthy and running
 docker-compose ps
 ```
 
-### Services Started:
+#### Services Started:
+| Service | Port | External URL | Description |
+|---|---|---|---|
+| **Zookeeper** | `2181` | - | Kafka coordination |
+| **Kafka** | `9092` / `29092` | - | Message Broker |
+| **Kafka Connect** | `8083` | http://localhost:8083 | Debezium connectors engine |
+| **Kafka UI** | `8080` | http://localhost:8080 | Kafka monitoring dashboard |
+| **PostgreSQL** | `5432` | - | Target database (sink) |
+| **pgAdmin** | `5050` | http://localhost:5050 | PostgreSQL UI editor |
+| **Elasticsearch** | `9200` | http://localhost:9200 | Search engine |
+| **Kibana** | `5601` | http://localhost:5601 | Elasticsearch dashboard |
 
-| Service | Port | URL | Description |
-|---------|------|-----|-------------|
-| Zookeeper | 2181 | - | Kafka coordination |
-| Kafka | 9092, 29092 | - | Message broker |
-| Kafka Connect | 8083 | http://localhost:8083 | Debezium connectors |
-| Kafka UI | 8080 | http://localhost:8080 | Kafka monitoring UI |
-| PostgreSQL | 5432 | - | Target database (sink) |
-| pgAdmin | 5050 | http://localhost:5050 | PostgreSQL management UI |
-| Elasticsearch | 9200, 9300 | http://localhost:9200 | Search engine |
-| Kibana | 5601 | http://localhost:5601 | Elasticsearch UI |
-
-### Wait for Services to be Ready
-
+#### Wait for Services to be Ready
 ```bash
-# Check Kafka Connect is ready (wait ~30-60 seconds)
+# Verify Kafka Connect REST API is ready to accept requests (returns empty array `[]` initially)
 curl http://localhost:8083/connectors
 
-# Check Elasticsearch is ready
+# Check Elasticsearch health status (returns green/yellow state)
 curl http://localhost:9200/_cluster/health
 ```
 
-Expected response for connectors: `[]` (empty array)
-
 ---
 
-## Step 2: Setup SQL Server Database
+### Step 3: Register All Connectors
+To capture changes from SQL Server and replicate them to PostgreSQL, register the source and sink connectors.
 
-### Option A: Using Existing SQL Server
+Open [kafka-connect.http]
+inside an editor (such as VS Code with the **REST Client** extension installed). Execute all requests inside the file:
+1. **Source Connectors**: Run POST requests to `/connectors` to create source connectors for `teams`, `players`, and `squad` tables.
+2. **Sink Connectors**: Run POST requests to `/connectors` to create sink connectors to write Kafka events into PostgreSQL.
 
-1. Connect to your SQL Server using SSMS or Azure Data Studio
-2. Run the script: `script/init_sqlserver.sql`
-
-### Option B: Add SQL Server to Docker Compose
-
-Add this service to `docker-compose.yml`:
-
-```yaml
-sqlserver:
-  image: mcr.microsoft.com/mssql/server:2022-latest
-  container_name: sqlserver
-  hostname: sqlserver
-  ports:
-    - "1433:1433"
-  environment:
-    ACCEPT_EULA: "Y"
-    MSSQL_SA_PASSWORD: "YourStrong@Passw0rd"
-    MSSQL_AGENT_ENABLED: "true"
-  networks:
-    - debezium-network
-```
-
-Then run:
-```bash
-docker-compose up -d sqlserver
-
-# Wait for SQL Server to start, then run init script
-docker exec -it sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -C -i /path/to/init_sqlserver.sql
-```
-
-### What the Script Creates:
-
-- **Database**: `sport`
-- **Tables**: `teams`, `players`, `squad`
-- **User**: `debezium_user` (Password: `Debezium@2025!`)
-- **CDC**: Enabled on all 3 tables
-
----
-
-## Step 3: Register Source Connectors
-
-Source connectors capture changes from SQL Server and publish to Kafka.
-
-### Register All Source Connectors
+#### Alternative: Registering using cURL
+If you don't use VS Code or the REST Client extension, you can execute the configuration registration commands via command line:
 
 ```bash
-# Register teams source connector
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @connectors/source/teams-source-connector.json
+# Register Source Connectors (SQL Server -> Kafka)
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @connectors/source/teams-source-connector.json
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @connectors/source/players-source-connector.json
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @connectors/source/squad-source-connector.json
 
-# Register players source connector
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @connectors/source/players-source-connector.json
-
-# Register squad source connector
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @connectors/source/squad-source-connector.json
+# Register Sink Connectors (Kafka -> PostgreSQL)
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @connectors/sink/teams-sink-connector.json
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @connectors/sink/players-sink-connector.json
+curl -X POST http://localhost:8083/connectors -H "Content-Type: application/json" -d @connectors/sink/squad-sink-connector.json
 ```
 
-### Verify Source Connectors
-
+#### Verify Connector Statuses
 ```bash
-# List all connectors
+# List all registered connectors
 curl http://localhost:8083/connectors
 
-# Check specific connector status
+# Check status of specific connectors (should be "RUNNING")
 curl http://localhost:8083/connectors/sqlserver-teams-source-connector/status
-curl http://localhost:8083/connectors/sqlserver-players-source-connector/status
-curl http://localhost:8083/connectors/sqlserver-squad-source-connector/status
-```
-
----
-
-## Step 4: Register Sink Connectors
-
-Sink connectors consume from Kafka and write to PostgreSQL.
-
-### Register All Sink Connectors
-
-```bash
-# Register teams sink connector
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @connectors/sink/teams-sink-connector.json
-
-# Register players sink connector
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @connectors/sink/players-sink-connector.json
-
-# Register squad sink connector
-curl -X POST http://localhost:8083/connectors \
-  -H "Content-Type: application/json" \
-  -d @connectors/sink/squad-sink-connector.json
-```
-
-### Verify Sink Connectors
-
-```bash
 curl http://localhost:8083/connectors/postgres-teams-sink-connector/status
-curl http://localhost:8083/connectors/postgres-players-sink-connector/status
-curl http://localhost:8083/connectors/postgres-squad-sink-connector/status
 ```
 
 ---
 
-## Step 5: Run SearchService (Optional)
+## Step 4: Run SearchService (Optional)
 
 The SearchService is a .NET 8.0 API that consumes Kafka events and indexes player data to Elasticsearch.
 
@@ -262,7 +196,7 @@ docker run -d \
 
 ---
 
-## Step 6: Verify CDC is Working
+## Step 5: Verify CDC is Working
 
 ### Check Kafka Topics
 
@@ -319,7 +253,7 @@ curl http://localhost:9200/players/_search?pretty
 
 ---
 
-## Step 7: Test CDC with Data Changes
+## Step 6: Test CDC with Data Changes
 
 Run these SQL commands in SQL Server to test CDC:
 
@@ -403,7 +337,7 @@ curl -X POST http://localhost:8083/connectors/sqlserver-teams-source-connector/r
 | Issue | Solution |
 |-------|----------|
 | Connection refused to SQL Server | Verify SQL Server hostname/port in connector config |
-| CDC not enabled error | Run `init_sqlserver.sql` script first |
+| CDC not enabled error | Run [script/init_sqlserver.sql](file:///c:/Users/NamDang/Documents/kafka-connect-debezium/script/init_sqlserver.sql) script first |
 | Permission denied | Check `debezium_user` has proper CDC permissions |
 | Kafka Connect not ready | Wait 30-60 seconds after starting containers |
 | Elasticsearch connection failed | Wait for Elasticsearch to be healthy |
