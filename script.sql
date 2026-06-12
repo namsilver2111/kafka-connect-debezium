@@ -3,7 +3,7 @@ FROM [dbo].[teams]
 WHERE [team_id] = 1
 
 UPDATE [dbo].[teams]
-SET [city] = 'Manchester 123456'
+SET [city] = 'Manchester'
 WHERE [team_id] = 1
 
 SELECT *
