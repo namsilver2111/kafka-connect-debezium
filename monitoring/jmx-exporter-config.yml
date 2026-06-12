@@ -2,34 +2,4 @@ lowercaseOutputName: true
 lowercaseOutputLabelNames: true
 
 rules:
-  # Debezium connector-metrics context=streaming (which has MilliSecondsBehindSource)
-  - pattern: "debezium.([^:]+)<type=connector-metrics, context=([^,]+), server=([^,]+)><>MilliSecondsBehindSource"
-    name: "debezium_metrics_milliseconds_behind_source"
-    help: "Debezium lag in milliseconds"
-    type: GAUGE
-    labels:
-      plugin: "$1"
-      context: "$2"
-      server: "$3"
-
-  # Standard JVM memory usage
-  - pattern: 'java.lang<type=Memory><(\w+)MemoryUsage>(\w+)'
-    name: jvm_memory_$1_$2_bytes
-    help: "JVM Memory $1 $2 in bytes"
-    type: GAUGE
-
-  # JVM garbage collection
-  - pattern: 'java.lang<type=GarbageCollector, name=(.+)><>(CollectionCount|CollectionTime)'
-    name: jvm_gc_$2_total
-    help: "JVM Garbage Collector collection count or time"
-    type: COUNTER
-    labels:
-      collector: "$1"
-
-  # JVM memory pool usage
-  - pattern: 'java.lang<type=MemoryPool, name=(.+)><>(Usage|PeakUsage|CollectionUsage)'
-    name: jvm_memory_pool_$2_bytes
-    help: "JVM Memory Pool usage bytes"
-    type: GAUGE
-    labels:
-      pool: "$1"
+  - pattern: ".*"

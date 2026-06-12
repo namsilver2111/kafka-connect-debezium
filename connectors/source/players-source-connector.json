@@ -9,10 +9,11 @@
     "database.password": "Debezium@2025!",
     "database.names": "sport",
     "database.encrypt": "false",
-    "topic.prefix": "cdc",
+    "topic.prefix": "cdc-players",
     "table.include.list": "dbo.players",
     "schema.history.internal.kafka.bootstrap.servers": "kafka:29092",
-    "schema.history.internal.kafka.topic": "schema-changes.sport",
+    "schema.history.internal.kafka.topic": "schema-changes.sport-players",
+    "schema.history.internal.consumer.group.id": "players-schemahistory",
     "database.history.kafka.bootstrap.servers": "kafka:29092",
     "database.history.kafka.topic": "dbhistory.sport.players",
     "key.converter": "org.apache.kafka.connect.json.JsonConverter",
@@ -20,6 +21,10 @@
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable": "true",
     "include.schema.changes": "true",
-    "snapshot.mode": "initial"
+    "snapshot.mode": "initial",
+    "transforms": "route",
+    "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.route.regex": "cdc-players\\.(.*)",
+    "transforms.route.replacement": "cdc.$1"
   }
 }
